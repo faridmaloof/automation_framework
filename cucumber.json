@@ -1,0 +1,21 @@
+{
+  "default": {
+    "require": [
+      "steps/**/*.steps.ts",
+      "support/**/*.ts"
+    ],
+    "paths": ["features/**/*.feature"],
+    "requireModule": ["ts-node/register"],
+    "format": [
+      "html:reports/cucumber-report.html",
+      "json:reports/cucumber-report.json",
+      "junit:reports/junit.xml",
+      "summary",
+      "progress-bar"
+    ],
+    "parallel": 2,
+    "retry": 1,
+    "retryTagFilter": "@flaky",
+    "publishQuiet": true
+  }
+}

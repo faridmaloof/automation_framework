@@ -1,15 +1,128 @@
 {
-  "name": "automation",
+  "name": "playwright-super-framework",
   "version": "1.0.0",
-  "description": "",
+  "description": "Framework de Automatización Integral con Orquestación Multi-Equipo - Playwright + Cucumber + TypeScript",
   "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "scripts": {
+    "test": "cucumber-js features/pokemon/consultar-pokemon.feature",
+    "test:headed": "cross-env HEADLESS=false cucumber-js features/pokemon/consultar-pokemon.feature",
+    "test:ui": "playwright test --ui",
+    "test:debug": "cucumber-js --parallel 1 features/pokemon/consultar-pokemon.feature",
+    
+    "test:smoke": "cucumber-js features/pokemon/consultar-pokemon.feature --tags '@smoke'",
+    "test:regression": "cucumber-js features/pokemon/consultar-pokemon.feature --tags '@regression'",
+    
+    "test:api": "cucumber-js features/pokemon/consultar-pokemon.feature --tags '@api'",
+    "test:api:rest": "cucumber-js features/pokemon/consultar-pokemon.feature --tags '@api and @rest'",
+    "test:api:rest:smoke": "cucumber-js features/pokemon/consultar-pokemon.feature --tags '@api and @rest and @smoke'",
+    "test:api:graphql": "cucumber-js --tags '@api and @graphql'",
+    "test:api:soap": "cucumber-js --tags '@api and @soap'",
+    
+    "test:web": "cucumber-js features/pokemon/consultar-pokemon.feature --tags '@web'",
+    "test:web:chrome": "cross-env BROWSER=chromium cucumber-js features/pokemon/consultar-pokemon.feature --tags '@web'",
+    "test:web:firefox": "cross-env BROWSER=firefox cucumber-js --tags '@web and @firefox'",
+    "test:web:safari": "cross-env BROWSER=webkit cucumber-js --tags '@web and @safari'",
+    
+    "test:mobile": "cucumber-js --tags '@mobile'",
+    "test:mobile:android": "cucumber-js --tags '@mobile and @android'",
+    "test:mobile:ios": "cucumber-js --tags '@mobile and @ios'",
+    
+    "test:parallel": "cucumber-js features/pokemon/consultar-pokemon.feature --parallel 4",
+    "test:ci": "cucumber-js features/pokemon/consultar-pokemon.feature --tags 'not @wip and not @web' --format json:reports/cucumber-report.json",
+    
+    "report": "start reports/cucumber-report.html",
+    
+    "test:bdd": "playwright test --project=bdd",
+    "test:bdd:smoke": "playwright test --project=bdd --grep @smoke",
+    "test:bdd:api": "playwright test --project=bdd --grep @api",
+    "test:bdd:rest": "playwright test --project=bdd --grep @rest",
+    "test:bdd:graphql": "playwright test --project=bdd --grep @graphql",
+    "cucumber": "cucumber-js",
+    "cucumber:dev": "cucumber-js --parallel 1",
+    "cucumber:tags": "cucumber-js --tags",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "report:html": "playwright show-report",
+    "orchestrator:init": "pwsh ./scripts/init-submodules.ps1",
+    "orchestrator:update": "pwsh ./scripts/update-all-teams.ps1",
+    "orchestrator:execute": "pwsh ./scripts/execute-teams.ps1",
+    "orchestrator:cli": "ts-node orchestrator/cli.ts",
+    "db:seed": "ts-node scripts/seed-database.ts",
+    "db:cleanup": "ts-node scripts/cleanup-database.ts",
+    "xray:publish": "ts-node scripts/publish-to-xray.ts",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf allure-results allure-report test-results playwright-report",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "playwright",
+    "cucumber",
+    "typescript",
+    "automation",
+    "testing",
+    "bdd",
+    "page-object-model",
+    "screenplay-pattern",
+    "test-orchestration",
+    "multi-team"
+  ],
+  "author": "QA Engineering Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.918.0",
+    "@azure/identity": "^4.13.0",
+    "@azure/keyvault-secrets": "^4.10.0",
+    "@cucumber/cucumber": "^12.2.0",
+    "@faker-js/faker": "^10.1.0",
+    "@google-cloud/secret-manager": "^6.1.1",
     "@playwright/test": "^1.56.1",
-    "@types/node": "^24.9.1"
+    "@types/mssql": "^9.1.8",
+    "@types/node": "^24.9.1",
+    "@types/pg": "^8.15.6",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "allure-commandline": "^2.34.1",
+    "allure-playwright": "^3.4.1",
+    "eslint": "^9.38.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "multiple-cucumber-html-reporter": "^3.9.3",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "axios": "^1.13.0",
+    "csv-parse": "^6.1.0",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "joi": "^18.0.1",
+    "mongodb": "^6.20.0",
+    "mssql": "^12.0.0",
+    "mysql2": "^3.15.3",
+    "pg": "^8.16.3",
+    "winston": "^3.18.3",
+    "xlsx": "^0.18.5"
   }
 }

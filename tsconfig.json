@@ -1,0 +1,85 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true,
+    
+    /* Emit */
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "importHelpers": true,
+    
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    
+    /* Advanced */
+    "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
+    
+    /* Path Mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["src/core/*"],
+      "@pages/*": ["src/pages/*"],
+      "@steps/*": ["src/steps/*"],
+      "@tasks/*": ["src/tasks/*"],
+      "@interactions/*": ["src/interactions/*"],
+      "@abilities/*": ["src/abilities/*"],
+      "@actors/*": ["src/actors/*"],
+      "@api/*": ["src/api/*"],
+      "@config/*": ["config/*"],
+      "@data/*": ["data/*"],
+      "@helpers/*": ["src/core/helpers/*"],
+      "@fixtures/*": ["src/core/fixtures/*"],
+      "@orchestrator/*": ["orchestrator/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "features/**/*",
+    "orchestrator/**/*",
+    "scripts/**/*",
+    "config/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "allure-results",
+    "allure-report",
+    "test-results",
+    "playwright-report",
+    "coverage"
+  ],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
+}
