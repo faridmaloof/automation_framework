@@ -1,53 +1,44 @@
 # Dependencies
 node_modules/
 package-lock.json
-yarn.lock
-pnpm-lock.yaml
 
 # Build outputs
 dist/
 build/
-out/
 *.js
 *.js.map
 *.d.ts
-*.d.ts.map
-!playwright.config.ts
-!cucumber.config.ts
-!*.config.js
-!.eslintrc.cjs
+!cucumber.json
 
 # Test results and reports
-test-results/
-playwright-report/
-blob-report/
-allure-results/
-allure-report/
-cucumber-report/
 reports/
-junit/
 coverage/
-.nyc_output/
 
 # Screenshots and videos
 screenshots/
-videos/
-traces/
 
 # Logs
 logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
 
 # Environment variables
 .env
 .env.local
-.env.*.local
-.env.development
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*_OLD_BACKUP.*
+*.bak
 .env.production
 .env.test
 

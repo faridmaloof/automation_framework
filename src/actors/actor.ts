@@ -1,7 +1,7 @@
 import { Ability } from '../abilities/ability';
 import { Task } from '../tasks/task';
 import { Question } from '../questions/question';
-import { Logger } from '../core/helpers/logger';
+import { Logger } from '../helpers/logger';
 
 /**
  * Actor - Representa un usuario que interactúa con el sistema
