@@ -72,8 +72,8 @@ if (-not (Test-Path $TestResultsDir)) {
     exit 0
 }
 
-# Function to clean up reports by pattern
-function Clean-Reports {
+# Function to remove old reports by pattern (using approved verb)
+function Remove-OldReports {
     param(
         [string]$Pattern,
         [string]$TypeName
@@ -160,8 +160,8 @@ function Clean-Reports {
     }
 }
 
-# Function to clean up JSON/XML reports
-function Clean-FileReports {
+# Function to remove old file reports (using approved verb)
+function Remove-OldFileReports {
     param(
         [string]$Pattern,
         [string]$TypeName
@@ -234,20 +234,20 @@ Write-Host ""
 
 switch ($ReportType) {
     'html' {
-        Clean-Reports -Pattern "html-*" -TypeName "HTML"
+        Remove-OldReports -Pattern "html-*" -TypeName "HTML"
     }
     'json' {
-        Clean-FileReports -Pattern "json-*.json" -TypeName "JSON"
+        Remove-OldFileReports -Pattern "json-*.json" -TypeName "JSON"
     }
     'junit' {
-        Clean-FileReports -Pattern "junit-*.xml" -TypeName "JUnit XML"
+        Remove-OldFileReports -Pattern "junit-*.xml" -TypeName "JUnit XML"
     }
     'all' {
-        Clean-Reports -Pattern "html-*" -TypeName "HTML"
+        Remove-OldReports -Pattern "html-*" -TypeName "HTML"
         Write-Host ""
-        Clean-FileReports -Pattern "json-*.json" -TypeName "JSON"
+        Remove-OldFileReports -Pattern "json-*.json" -TypeName "JSON"
         Write-Host ""
-        Clean-FileReports -Pattern "junit-*.xml" -TypeName "JUnit XML"
+        Remove-OldFileReports -Pattern "junit-*.xml" -TypeName "JUnit XML"
     }
 }
 

@@ -7,28 +7,22 @@
     "test": "cucumber-js",
     "test:headed": "cross-env HEADLESS=false cucumber-js",
     "test:debug": "cucumber-js --parallel 1",
-    
     "test:smoke": "cucumber-js --tags '@smoke'",
     "test:regression": "cucumber-js --tags '@regression'",
-    
     "test:api": "cucumber-js --tags '@api'",
     "test:api:rest": "cucumber-js --tags '@api and @rest'",
     "test:api:rest:smoke": "cucumber-js --tags '@api and @rest and @smoke'",
     "test:api:graphql": "cucumber-js --tags '@api and @graphql'",
     "test:api:soap": "cucumber-js --tags '@api and @soap'",
-    
     "test:web": "cucumber-js --tags '@web'",
     "test:web:chrome": "cross-env BROWSER=chromium cucumber-js --tags '@web'",
     "test:web:firefox": "cross-env BROWSER=firefox cucumber-js --tags '@web and @firefox'",
     "test:web:safari": "cross-env BROWSER=webkit cucumber-js --tags '@web and @safari'",
-    
     "test:mobile": "cucumber-js --tags '@mobile'",
     "test:mobile:android": "cucumber-js --tags '@mobile and @android'",
     "test:mobile:ios": "cucumber-js --tags '@mobile and @ios'",
-    
     "test:parallel": "cucumber-js --parallel 4",
     "test:ci": "cucumber-js --tags 'not @wip and not @web' --format json:reports/cucumber-report.json",
-    
     "report": "start reports/cucumber-report.html",
     "clean": "pwsh ./scripts/cleanup-old-reports.ps1",
     "lint": "eslint . --ext .ts,.tsx",
@@ -83,6 +77,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "multiple-cucumber-html-reporter": "^3.9.3",
+    "pino": "^10.1.0",
+    "pino-pretty": "^13.1.2",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",

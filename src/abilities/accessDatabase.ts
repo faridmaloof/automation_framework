@@ -16,7 +16,7 @@
  * ```
  */
 
-import { DatabaseClient } from '../core/database/databaseClient';
+import { DatabaseClient } from '../helpers/databaseClient';
 import { Ability } from './ability';
 import { Actor } from '../actors/actor';
 
