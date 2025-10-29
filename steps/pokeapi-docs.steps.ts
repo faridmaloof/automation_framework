@@ -1,8 +1,8 @@
 /**
  * Step Definitions: PokeAPI Documentation Navigation Tests
  * 
- * Estos steps implementan los escenarios definidos en navegacion-documentacion.feature
- * utilizando el patrón Screenplay (Actor, Task, Question)
+ * These steps implement the scenarios defined in navigation-documentation.feature
+ * using the Screenplay pattern (Actor, Task, Question)
  */
 
 import { Given, When, Then, DataTable } from '@cucumber/cucumber';
@@ -32,140 +32,140 @@ import { NavigationIsAccessible } from '../src/questions/web/docs/NavigationIsAc
 import { ContentIsReadable } from '../src/questions/web/docs/ContentIsReadable';
 
 // ========================================
-// GIVEN - Precondiciones
+// GIVEN - Preconditions
 // ========================================
 
 /**
- * Dado que estoy en la página de documentación de PokeAPI
+ * Given I am on the PokeAPI documentation page
  */
-Given('que estoy en la página de documentación de PokeAPI', async function (this: CustomWorld) {
-  console.log('🌐 Navegando a la página de documentación de PokeAPI');
+Given('I am on the PokeAPI documentation page', async function (this: CustomWorld) {
+  console.log('🌐 Navigating to PokeAPI documentation page');
   
   const task = new NavigateToPokeAPIDocs();
   await this.actor.attemptsTo(task);
   
-  console.log('✅ Navegación completada');
+  console.log('✅ Navigation completed');
 });
 
 // ========================================
-// WHEN - Acciones
+// WHEN - Actions
 // ========================================
 
 /**
- * Cuando hago clic en el enlace "{string}"
+ * When I click on the "{string}" link
  */
-When('hago clic en el enlace {string}', async function (this: CustomWorld, linkText: string) {
-  console.log(`🖱️ Haciendo clic en el enlace: ${linkText}`);
+When('I click on the {string} link', async function (this: CustomWorld, linkText: string) {
+  console.log(`🖱️ Clicking on link: ${linkText}`);
   
   await this.actor.attemptsTo(ClickLink.on(linkText));
   
-  console.log('✅ Clic completado');
+  console.log('✅ Click completed');
 });
 
 /**
- * Cuando cambio el tamaño del viewport a {string}
+ * When I change the viewport to {string}
  */
-When('cambio el tamaño del viewport a {string}', async function (this: CustomWorld, deviceType: string) {
-  console.log(`📱 Cambiando viewport a: ${deviceType}`);
+When('I change the viewport to {string}', async function (this: CustomWorld, deviceType: string) {
+  console.log(`📱 Changing viewport to: ${deviceType}`);
   
   await this.actor.attemptsTo(ChangeViewport.to(deviceType));
   
-  console.log('✅ Viewport cambiado');
+  console.log('✅ Viewport changed');
 });
 
 // ========================================
-// THEN - Verificaciones
+// THEN - Verifications
 // ========================================
 
 /**
- * Entonces debo ver el encabezado "{string}"
+ * Then I should see the "{string}" heading
  */
-Then('debo ver el encabezado {string}', async function (this: CustomWorld, heading: string) {
-  console.log(`👀 Verificando encabezado: ${heading}`);
+Then('I should see the {string} heading', async function (this: CustomWorld, heading: string) {
+  console.log(`👀 Verifying heading: ${heading}`);
   
   const isVisible = await this.actor.asks(SeeHeading.withText(heading));
   
   expect(isVisible).toBe(true);
-  console.log('✅ Encabezado verificado');
+  console.log('✅ Heading verified');
 });
 
 /**
- * Y debo ver los enlaces de navegación principales:
+ * And I should see the main navigation links:
  *   | API v1         |
  *   | API v2         |
  *   | GraphQL v1beta |
  */
-Then('debo ver los enlaces de navegación principales:', async function (this: CustomWorld, dataTable: DataTable) {
-  console.log('👀 Verificando enlaces de navegación principales');
+Then('I should see the main navigation links:', async function (this: CustomWorld, dataTable: DataTable) {
+  console.log('👀 Verifying main navigation links');
   
-  const links = dataTable.raw().flat(); // Obtener todos los valores de la tabla
+  const links = dataTable.raw().flat(); // Get all values from the table
   
   for (const linkText of links) {
-    console.log(`  📎 Verificando enlace: ${linkText}`);
+    console.log(`  📎 Verifying link: ${linkText}`);
     const isVisible = await this.actor.asks(SeeLink.withText(linkText));
     expect(isVisible).toBe(true);
   }
   
-  console.log('✅ Todos los enlaces verificados');
+  console.log('✅ All links verified');
 });
 
 /**
- * Entonces debo ver el mensaje de deprecación "{string}"
+ * Then I should see the deprecation message "{string}"
  */
-Then('debo ver el mensaje de deprecación {string}', async function (this: CustomWorld, message: string) {
-  console.log(`👀 Verificando mensaje de deprecación: ${message}`);
+Then('I should see the deprecation message {string}', async function (this: CustomWorld, message: string) {
+  console.log(`👀 Verifying deprecation message: ${message}`);
   
   const isVisible = await this.actor.asks(SeeDeprecationMessage.displayed());
   
   expect(isVisible).toBe(true);
-  console.log('✅ Mensaje de deprecación verificado');
+  console.log('✅ Deprecation message verified');
 });
 
 /**
- * Y debo ver la fecha de fin de soporte "{string}"
+ * And I should see the end of support date "{string}"
  */
-Then('debo ver la fecha de fin de soporte {string}', async function (this: CustomWorld, date: string) {
-  console.log(`👀 Verificando fecha de fin de soporte: ${date}`);
+Then('I should see the end of support date {string}', async function (this: CustomWorld, date: string) {
+  console.log(`👀 Verifying end of support date: ${date}`);
   
   const isVisible = await this.actor.asks(SeeDeprecationDate.displayed());
   
   expect(isVisible).toBe(true);
-  console.log('✅ Fecha de fin de soporte verificada');
+  console.log('✅ End of support date verified');
 });
 
 /**
- * Entonces debo ver el título de GraphQL
+ * Then I should see the GraphQL title
  */
-Then('debo ver el título de GraphQL', async function (this: CustomWorld) {
-  console.log('👀 Verificando título de GraphQL');
+Then('I should see the GraphQL title', async function (this: CustomWorld) {
+  console.log('👀 Verifying GraphQL title');
   
   const isVisible = await this.actor.asks(SeeGraphQLTitle.displayed());
   
   expect(isVisible).toBe(true);
-  console.log('✅ Título de GraphQL verificado');
+  console.log('✅ GraphQL title verified');
 });
 
 /**
- * Y debo ver la URL del endpoint "{string}"
+ * And I should see the endpoint URL "{string}"
  */
-Then('debo ver la URL del endpoint {string}', async function (this: CustomWorld, endpoint: string) {
-  console.log(`👀 Verificando URL del endpoint: ${endpoint}`);
+Then('I should see the endpoint URL {string}', async function (this: CustomWorld, endpoint: string) {
+  console.log(`👀 Verifying endpoint URL: ${endpoint}`);
   
   const isVisible = await this.actor.asks(SeeGraphQLEndpoint.displayed());
   
   expect(isVisible).toBe(true);
-  console.log('✅ URL del endpoint verificada');
+  console.log('✅ Endpoint URL verified');
 });
 
 /**
- * Y debo ver la sección "{string}"
+ * And I should see the "{string}" section
  */
-Then('debo ver la sección {string}', async function (this: CustomWorld, sectionName: string) {
-  console.log(`👀 Verificando sección: ${sectionName}`);
+Then('I should see the {string} section', async function (this: CustomWorld, sectionName: string) {
+  console.log(`👀 Verifying section: ${sectionName}`);
   
   let isVisible = false;
   
-  // Determinar qué Question usar según la sección
+  // Determine which Question to use based on the section
   switch (sectionName) {
     case 'GraphiQL':
       isVisible = await this.actor.asks(SeeGraphiQLSection.displayed());
@@ -174,82 +174,102 @@ Then('debo ver la sección {string}', async function (this: CustomWorld, section
       isVisible = await this.actor.asks(SeeFairUseTitle.displayed());
       break;
     default:
-      // Para secciones genéricas, usar SeeText
+      // For generic sections, use SeeText
       isVisible = await this.actor.asks(SeeText.containing(sectionName));
   }
   
   expect(isVisible).toBe(true);
-  console.log('✅ Sección verificada');
+  console.log('✅ Section verified');
 });
 
 /**
- * Y debo ver las secciones de recursos
+ * Then I should see the "{string}" title
  */
-Then('debo ver las secciones de recursos', async function (this: CustomWorld) {
-  console.log('👀 Verificando secciones de recursos');
+Then('I should see the {string} title', async function (this: CustomWorld, title: string) {
+  console.log(`👀 Verifying title: ${title}`);
+  
+  let isVisible = false;
+  
+  switch (title) {
+    case 'Fair Use Policy':
+      isVisible = await this.actor.asks(SeeFairUseTitle.displayed());
+      break;
+    default:
+      isVisible = await this.actor.asks(SeeText.containing(title));
+  }
+  
+  expect(isVisible).toBe(true);
+  console.log('✅ Title verified');
+});
+
+/**
+ * And I should see available resource sections
+ */
+Then('I should see available resource sections', async function (this: CustomWorld) {
+  console.log('👀 Verifying resource sections');
   
   const areVisible = await this.actor.asks(SeeResourceSections.displayed());
   
   expect(areVisible).toBe(true);
-  console.log('✅ Secciones de recursos verificadas');
+  console.log('✅ Resource sections verified');
 });
 
 /**
- * Y debo ver ejemplos de endpoints
+ * And I should see endpoint examples
  */
-Then('debo ver ejemplos de endpoints', async function (this: CustomWorld) {
-  console.log('👀 Verificando ejemplos de endpoints');
+Then('I should see endpoint examples', async function (this: CustomWorld) {
+  console.log('👀 Verifying endpoint examples');
   
   const areVisible = await this.actor.asks(SeeEndpointExamples.displayed());
   
   expect(areVisible).toBe(true);
-  console.log('✅ Ejemplos de endpoints verificados');
+  console.log('✅ Endpoint examples verified');
 });
 
 /**
- * Entonces todos los enlaces principales deben ser clickeables
+ * Then all main links should be clickable
  */
-Then('todos los enlaces principales deben ser clickeables', async function (this: CustomWorld) {
-  console.log('👀 Verificando que todos los enlaces sean clickeables');
+Then('all main links should be clickable', async function (this: CustomWorld) {
+  console.log('👀 Verifying that all links are clickable');
   
   const areClickable = await this.actor.asks(LinksAreClickable.check());
   
   expect(areClickable).toBe(true);
-  console.log('✅ Todos los enlaces son clickeables');
+  console.log('✅ All links are clickable');
 });
 
 /**
- * Y todos los enlaces deben tener URLs válidas
+ * And all main links should have valid URLs
  */
-Then('todos los enlaces deben tener URLs válidas', async function (this: CustomWorld) {
-  console.log('👀 Verificando que todos los enlaces tengan URLs válidas');
+Then('all main links should have valid URLs', async function (this: CustomWorld) {
+  console.log('👀 Verifying that all links have valid URLs');
   
   const haveValidURLs = await this.actor.asks(LinksHaveValidURLs.check());
   
   expect(haveValidURLs).toBe(true);
-  console.log('✅ Todos los enlaces tienen URLs válidas');
+  console.log('✅ All links have valid URLs');
 });
 
 /**
- * Y la navegación debe ser accesible
+ * And the navigation should be accessible
  */
-Then('la navegación debe ser accesible', async function (this: CustomWorld) {
-  console.log('👀 Verificando accesibilidad de la navegación');
+Then('the navigation should be accessible', async function (this: CustomWorld) {
+  console.log('👀 Verifying navigation accessibility');
   
   const isAccessible = await this.actor.asks(NavigationIsAccessible.check());
   
   expect(isAccessible).toBe(true);
-  console.log('✅ Navegación accesible');
+  console.log('✅ Navigation is accessible');
 });
 
 /**
- * Y el contenido debe ser legible
+ * And the content should be readable
  */
-Then('el contenido debe ser legible', async function (this: CustomWorld) {
-  console.log('👀 Verificando legibilidad del contenido');
+Then('the content should be readable', async function (this: CustomWorld) {
+  console.log('👀 Verifying content readability');
   
   const isReadable = await this.actor.asks(ContentIsReadable.check());
   
   expect(isReadable).toBe(true);
-  console.log('✅ Contenido legible');
+  console.log('✅ Content is readable');
 });
