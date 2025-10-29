@@ -25,7 +25,9 @@
     "test:parallel": "cucumber-js --parallel 4",
     "test:ci": "cucumber-js --tags \"not @wip and not @web\" --format json:reports/cucumber-report.json",
     "report": "start reports/cucumber-report.html",
-    "report:allure": "allure generate reports/allure-results --clean -o reports/allure-report && allure open reports/allure-report",
+    "report:allure": "node support/reporters/allure-reporter.js && allure generate reports/allure-results --clean -o reports/allure-report && allure open reports/allure-report",
+    "report:allure:generate": "node support/reporters/allure-reporter.js && allure generate reports/allure-results --clean -o reports/allure-report",
+    "report:allure:open": "allure open reports/allure-report",
     "report:timeline": "node scripts/generate-timeline-report.js",
     "report:detailed": "node scripts/generate-detailed-report.js",
     "clean": "pwsh ./scripts/cleanup-old-reports.ps1",
@@ -76,6 +78,7 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "allure-commandline": "^2.34.1",
+    "allure-cucumberjs": "^3.4.2",
     "allure-playwright": "^3.4.1",
     "eslint": "^9.38.0",
     "husky": "^9.1.7",
@@ -86,7 +89,8 @@
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "uuid": "^13.0.0"
   },
   "dependencies": {
     "ajv": "^8.17.1",

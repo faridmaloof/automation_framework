@@ -1,6 +1,7 @@
 import { setWorldConstructor, World, IWorldOptions } from '@cucumber/cucumber';
 import { Browser, Page, APIRequestContext, request, APIResponse } from '@playwright/test';
 import { Actor } from '../src/actors/actor';
+import { PokemonPage } from '../src/pages/web/PokemonPage';
 
 /**
  * Custom World extendido con Actor y contextos híbridos
@@ -19,6 +20,7 @@ export class CustomWorld extends World {
   lastResponse?: APIResponse;
   lastBody?: any;
   lastResponseTime?: number;
+  pokemonPage?: PokemonPage;
   
   // Configuration
   baseURL: string;

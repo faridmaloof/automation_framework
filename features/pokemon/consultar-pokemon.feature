@@ -9,16 +9,30 @@ Feature: Consultar información de Pokémon
 
   @smoke @api @rest
   Scenario: Consultar Pokémon Pikachu por API REST
-    When consulto el pokemon "pikachu" por REST
+    When consulto el pokemon "<pokemon>" por REST
     Then obtengo respuesta exitosa
-    And el nombre del pokemon es "pikachu"
+    And el nombre del pokemon es "<pokemon>"
     And el pokemon tiene id 25
     And el pokemon tiene habilidades
 
+    Examples:
+      | pokemon    |
+      | pikachu    |
+      | charizard  |
+      | bulbasaur  |
+      | squirtle   |
+
   @smoke @web @chrome
-  Scenario: Buscar Pokémon Pikachu en web
-    When busco el pokemon "pikachu" en la web
-    Then veo información del pokemon "pikachu"
+  Scenario: Buscar Pokémon en web
+    When busco el pokemon "<pokemon>" en la web
+    Then veo información del pokemon "<pokemon>"
+
+    Examples:
+      | pokemon    |
+      | pikachu    |
+      | charizard  |
+      | bulbasaur  |
+      | squirtle   |
 
   @regression @api @rest
   Scenario Outline: Consultar múltiples Pokémon
@@ -41,6 +55,13 @@ Feature: Consultar información de Pokémon
 
   @validation @api @rest @schema
   Scenario: Validar estructura de respuesta
-    When consulto el pokemon "pikachu" por REST
+    When consulto el pokemon "<pokemon>" por REST
     Then obtengo respuesta exitosa
     And la respuesta cumple con el schema de Pokemon
+
+    Examples:
+      | pokemon    |
+      | pikachu    |
+      | charizard  |
+      | bulbasaur  |
+      | squirtle   |

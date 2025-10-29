@@ -99,15 +99,102 @@ Browsers soportados:
 ### Generar Reportes
 
 ```powershell
-# HTML Report (por defecto)
+# Reporte HTML básico (por defecto)
 npm run report
+
+# Reporte Detallado con evidencia (screenshots, logs, JSON)
+npm run report:detailed
 
 # Timeline Report (visual con duración de tests)
 npm run report:timeline
 
-# Allure Report (requiere instalación)
-npm install -D allure-commandline
+# Allure Report - COMPLETO (convierte + genera + abre en navegador)
 npm run report:allure
+
+# Allure Report - Solo generar (sin abrir navegador)
+npm run report:allure:generate
+
+# Allure Report - Solo abrir (si ya fue generado)
+npm run report:allure:open
+```
+
+### Abrir Reportes Manualmente
+
+```powershell
+# Windows PowerShell
+start reports/cucumber-report.html      # Reporte básico
+start reports/detailed-report.html      # Reporte con evidencia
+start reports/timeline-report.html      # Timeline visual
+start reports/allure-report/index.html  # Allure (si existe)
+
+# Windows CMD
+reports\cucumber-report.html
+reports\detailed-report.html
+reports\timeline-report.html
+```
+
+### Tipos de Reportes
+
+| Reporte | Archivo | Descripción | Comando |
+|---------|---------|-------------|---------|
+| **HTML Básico** | `reports/cucumber-report.html` | Reporte simple con resultados | `npm run report` |
+| **Detallado** | `reports/detailed-report.html` | **📸 CON EVIDENCIA:** screenshots, logs, JSON, durations | `npm run report:detailed` |
+| **Timeline** | `reports/timeline-report.html` | Visualización temporal de ejecución | `npm run report:timeline` |
+| **Allure** | `reports/allure-report/index.html` | Dashboard avanzado con trends, categories, attachments | `npm run report:allure` |
+| **JSON** | `reports/cucumber-report.json` | Datos en formato JSON para integración CI/CD | (auto-generado) |
+| **JUnit** | `reports/junit.xml` | Compatible con Jenkins, CI/CD | (auto-generado) |
+
+### 🌟 Reporte Detallado (RECOMENDADO)
+
+El **reporte detallado** incluye:
+- ⏱️ **Duración de cada Step, Scenario y Feature**
+- 📸 **Screenshots** (imágenes inline con modal fullscreen)
+- 📝 **Logs de texto** (formateados con syntax highlighting)
+- 📋 **Datos JSON** (estructurados y pretty-printed)
+- 🎨 **UI moderna** con diseño responsive
+
+```powershell
+# Generar y abrir reporte detallado
+npm run report:detailed
+start reports/detailed-report.html
+```
+
+### 🎯 Allure Report (Dashboard Avanzado)
+
+El **reporte Allure** incluye:
+- 📊 **Gráficos y estadísticas**
+- 🏷️ **Categorización por tags** (@api, @web, @smoke)
+- 📎 **Attachments** (screenshots, logs, archivos)
+- 📈 **Trends históricos** (si se guardan resultados previos)
+- 🌍 **Environment info** (browser, base URL, versiones)
+- ⏱️ **Timeline de ejecución**
+
+```powershell
+# Workflow completo Allure
+npm run test:api:rest:smoke     # 1. Ejecutar tests
+npm run report:allure            # 2. Generar y abrir reporte
+
+# O paso a paso:
+npm run report:allure:generate   # Solo generar
+npm run report:allure:open       # Solo abrir navegador
+```
+
+### Ejemplo de Workflow Completo
+
+```powershell
+# 1. Ejecutar tests
+npm run test:api:rest:smoke
+
+# 2. Ver reporte detallado con evidencia
+npm run report:detailed
+
+# 3. Ver timeline de ejecución
+npm run report:timeline
+
+# 4. Generar dashboard Allure completo
+npm run report:allure
+
+# Los reportes se abren automáticamente en el navegador
 ```
 
 ### Configurar Reportes en .env
@@ -117,36 +204,8 @@ npm run report:allure
 GENERATE_HTML_REPORT=true
 GENERATE_JSON_REPORT=true
 GENERATE_JUNIT_REPORT=true
-GENERATE_ALLURE_REPORT=false
 GENERATE_TIMELINE_REPORT=true
 GENERATE_CUCUMBER_REPORT=true
-```
-
-### Tipos de Reportes
-
-| Reporte | Archivo | Descripción |
-|---------|---------|-------------|
-| **HTML** | `reports/cucumber-report.html` | Reporte visual con detalles de ejecución |
-| **JSON** | `reports/cucumber-report.json` | Datos en formato JSON para integración |
-| **JUnit** | `reports/junit.xml` | Compatible con Jenkins, CI/CD |
-| **Allure** | `reports/allure-report/` | Reporte avanzado con gráficos y métricas |
-| **Timeline** | `reports/timeline-report.html` | Visualización de duración de tests |
-
-### Ejemplo de Workflow con Reportes
-
-```powershell
-# 1. Ejecutar tests
-npm run test:smoke
-
-# 2. Generar reporte HTML (automático)
-npm run report
-
-# 3. Generar timeline
-npm run report:timeline
-
-# 4. (Opcional) Generar Allure
-# Primero: GENERATE_ALLURE_REPORT=true en .env
-npm run report:allure
 ```
 
 ---
