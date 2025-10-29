@@ -5,6 +5,10 @@ import { Actor } from '../src/actors/actor';
 import { CallAnAPI } from '../src/abilities/callAnAPI';
 import { BrowseTheWeb } from '../src/abilities/browseTheWeb';
 import { Logger, flushLogs } from '../src/helpers/logger';
+import dotenv from 'dotenv';
+
+// Cargar variables de entorno ANTES que cualquier otra cosa
+dotenv.config();
 
 // Timeout global
 setDefaultTimeout(60 * 1000);
@@ -101,6 +105,26 @@ After(async function (this: CustomWorld, { result, pickle }) {
     }
   }
 
+  // Attach API Evidence if available
+  if (this.actor) {
+    try {
+      const CallAnAPI = await import('../src/abilities/callAnAPI');
+      const apiAbility = CallAnAPI.CallAnAPI.from(this.actor);
+      const requestLog = apiAbility.getRequestLog();
+      
+      if (requestLog.length > 0) {
+        // Attach as JSON for machine parsing
+        this.attach(JSON.stringify(requestLog, null, 2), 'application/json');
+        
+        // Attach as formatted text for human reading
+        const report = apiAbility.generateEvidenceReport();
+        this.attach(report, 'text/plain');
+      }
+    } catch (error) {
+      // Actor doesn't have CallAnAPI ability (Web/Mobile tests)
+    }
+  }
+
   // Cleanup Browser
   if (this.browser) {
     await this.browser.close();
@@ -118,13 +142,49 @@ After(async function (this: CustomWorld, { result, pickle }) {
 });
 
 /**
- * BEFORE ALL: Setup inicial
+ * BEFORE ALL: Setup inicial con validaciones mandatorias
  */
 BeforeAll(async function () {
   hookLogger.info('===== CUCUMBER TEST EXECUTION STARTED =====');
   hookLogger.info(`Environment: ${process.env.NODE_ENV || 'test'}`);
-  hookLogger.info(`Base URL: ${process.env.API_BASE_URL || 'https://pokeapi.co'}`);
+  
+  // ========== VALIDACIONES MANDATORIAS ==========
+  const mandatoryVars = ['API_BASE_URL'];
+  const missingVars: string[] = [];
+  
+  mandatoryVars.forEach(varName => {
+    if (!process.env[varName]) {
+      missingVars.push(varName);
+    }
+  });
+  
+  if (missingVars.length > 0) {
+    const errorMsg = `
+╔════════════════════════════════════════════════════════════════╗
+║  ❌ CONFIGURACIÓN MANDATORIA FALTANTE                         ║
+╚════════════════════════════════════════════════════════════════╝
+
+Variables requeridas no configuradas en .env:
+${missingVars.map(v => `  • ${v}`).join('\n')}
+
+📋 Pasos para solucionar:
+  1. Copia .env.example a .env
+  2. Configura las variables mandatorias
+  3. Vuelve a ejecutar los tests
+
+Ejemplo:
+  cp .env.example .env
+  # Edita .env y configura ${missingVars[0]}=<valor>
+`;
+    hookLogger.error(errorMsg);
+    throw new Error(`❌ Faltan variables mandatorias: ${missingVars.join(', ')}`);
+  }
+  
+  // ========== INFORMACIÓN DE CONFIGURACIÓN ==========
+  hookLogger.info(`API Base URL: ${process.env.API_BASE_URL}`);
   hookLogger.info(`Headless: ${process.env.HEADLESS !== 'false'}`);
+  hookLogger.info(`Environment: ${process.env.ENV || 'dev'}`);
+  hookLogger.info(`Browser(s): ${process.env.BROWSER || 'chromium'}`);
 });
 
 /**

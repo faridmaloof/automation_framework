@@ -4,7 +4,7 @@
  * Benefits:
  * - Asynchronous I/O (non-blocking)
  * - JSON structured logs for CI (machine-readable)
- * - Pretty printing for development
+ * - Clean, readable output for development
  * - Automatic context tagging
  * - Flush-safe for CI pipelines
  * - Compatible with Cucumber / Playwright
@@ -15,15 +15,14 @@ import fs from 'fs';
 import path from 'path';
 
 // ---------------------------------------------
-// 🌐 Environment Detection
+// Environment Detection
 // ---------------------------------------------
 const isCI = !!process.env.CI;
 const isDebug = !!process.env.DEBUG;
 const logLevel = process.env.LOG_LEVEL || (isDebug ? 'debug' : 'info');
-const useEmojis = !isCI; // Emojis off in CI for safer output
 
 // ---------------------------------------------
-// 📁 Optional Log Directory (only if writing to file)
+// Optional Log Directory (only if writing to file)
 // ---------------------------------------------
 let logFilePath: string | undefined;
 if (process.env.WRITE_LOGS_TO_FILE) {
@@ -33,7 +32,7 @@ if (process.env.WRITE_LOGS_TO_FILE) {
 }
 
 // ---------------------------------------------
-// ⚙️ Pino Configuration
+// Pino Configuration (Pretty for dev, JSON for CI)
 // ---------------------------------------------
 const pinoConfig: LoggerOptions = {
   level: logLevel,
@@ -43,10 +42,11 @@ const pinoConfig: LoggerOptions = {
         target: 'pino-pretty',
         options: {
           colorize: true,
-          translateTime: 'HH:MM:ss',
+          translateTime: 'HH:MM:ss.l',
           ignore: 'pid,hostname',
-          messageFormat: '{context} {msg}',
-          singleLine: false,
+          messageFormat: '[{context}] {msg}',
+          singleLine: true,
+          levelFirst: false,
         },
       },
 };
@@ -60,7 +60,7 @@ const destination = logFilePath
 const baseLogger = pino(pinoConfig, destination);
 
 // ---------------------------------------------
-// 🧱 Logger Class Definition
+// Logger Class Definition
 // ---------------------------------------------
 export class Logger {
   private logger: pino.Logger;
@@ -69,67 +69,71 @@ export class Logger {
     this.logger = baseLogger.child({ context });
   }
 
-  private icon(symbol: string, fallback: string): string {
-    return useEmojis ? symbol : fallback;
-  }
-
   info(message: string, ...args: any[]): void {
-    this.logger.info({ args }, `${this.icon('ℹ️', '[INFO]')} ${message}`);
+    this.logger.info({ args }, `[INFO] ${message}`);
   }
 
   error(message: string, ...args: any[]): void {
-    this.logger.error({ args }, `${this.icon('❌', '[ERROR]')} ${message}`);
+    this.logger.error({ args }, `[ERROR] ${message}`);
   }
 
   warn(message: string, ...args: any[]): void {
-    this.logger.warn({ args }, `${this.icon('⚠️', '[WARN]')} ${message}`);
+    this.logger.warn({ args }, `[WARN] ${message}`);
   }
 
   debug(message: string, ...args: any[]): void {
-    this.logger.debug({ args }, `${this.icon('🔍', '[DEBUG]')} ${message}`);
+    this.logger.debug({ args }, `[DEBUG] ${message}`);
   }
 
   success(message: string, ...args: any[]): void {
-    this.logger.info({ args }, `${this.icon('✅', '[OK]')} ${message}`);
+    this.logger.info({ args }, `[OK] ${message}`);
   }
 
+  // Additional methods for structured logging
   step(step: string, data?: any): void {
-    this.logger.info({ step, data }, `${this.icon('🎬', '[STEP]')} ${step}`);
+    this.logger.info({ step, data }, `[STEP] ${step}`);
   }
 
   scenario(scenario: string, tags?: string[]): void {
-    this.logger.info({ scenario, tags }, `${this.icon('📋', '[SCENARIO]')} ${scenario}`);
+    this.logger.info({ scenario, tags }, `[SCENARIO] ${scenario}`);
   }
 
   result(status: 'PASSED' | 'FAILED' | 'SKIPPED', message: string): void {
-    const icon = status === 'PASSED'
-      ? this.icon('✅', '[PASS]')
-      : status === 'FAILED'
-      ? this.icon('❌', '[FAIL]')
-      : this.icon('⏭️', '[SKIP]');
-    this.logger.info({ status }, `${icon} ${message}`);
+    const prefix = status === 'PASSED' ? '[PASS]' : status === 'FAILED' ? '[FAIL]' : '[SKIP]';
+    this.logger.info({ status }, `${prefix} ${message}`);
   }
 
   performance(operation: string, duration: number, threshold?: number): void {
     const withinThreshold = threshold ? duration < threshold : true;
-    const icon = withinThreshold
-      ? this.icon('⚡', '[FAST]')
-      : this.icon('⏱️', '[SLOW]');
+    const prefix = withinThreshold ? '[PERF]' : '[SLOW]';
     this.logger.info(
       { operation, duration, threshold, withinThreshold },
-      `${icon} ${operation}: ${duration}ms`
+      `${prefix} ${operation}: ${duration}ms`
+    );
+  }
+
+  // New method for API evidence
+  apiRequest(method: string, url: string, data?: any): void {
+    this.logger.info(
+      { method, url, data },
+      `[API-REQ] ${method} ${url}`
+    );
+  }
+
+  apiResponse(status: number, data: any, duration: number): void {
+    this.logger.info(
+      { status, data, duration },
+      `[API-RES] ${status} (${duration}ms)`
     );
   }
 }
 
-// ---------------------------------------------
-// 🧹 Flush pending logs safely (for After hooks)
-// ---------------------------------------------
+/**
+ * Flush all pending logs (call in After hooks)
+ */
 export async function flushLogs(): Promise<void> {
-  const dest: any = (baseLogger as any).destination?.() ?? destination;
-  if (dest && typeof dest.flush === 'function') {
-    await new Promise<void>((resolve) => dest.flush(resolve));
-  } else {
-    await new Promise((resolve) => setImmediate(resolve));
-  }
+  return new Promise((resolve) => {
+    // Pino flushes automatically but we give it a tick
+    setImmediate(resolve);
+  });
 }

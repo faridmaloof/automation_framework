@@ -20,9 +20,11 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { Ability } from './ability';
 import { Actor } from '../actors/actor';
+import { Logger } from '../helpers/logger';
 
 export class CallAnAPI extends Ability {
   private requestLog: APIRequestLog[] = [];
+  private logger = new Logger('CallAnAPI');
 
   /**
    * Crea una instancia de CallAnAPI con un APIRequestContext específico
@@ -105,9 +107,15 @@ export class CallAnAPI extends Ability {
   async get(url: string, options?: any): Promise<APIResponseWithEvidence> {
     const startTime = Date.now();
     
+    // Log request
+    this.logger.apiRequest('GET', url, options?.params);
+    
     const response = await this.apiContext.get(url, options);
     const responseBody = await this.extractResponseBody(response);
     const duration = Date.now() - startTime;
+
+    // Log response
+    this.logger.apiResponse(response.status(), responseBody, duration);
 
     const evidence = this.createEvidence('GET', url, options, response, responseBody, duration);
     this.requestLog.push(evidence);

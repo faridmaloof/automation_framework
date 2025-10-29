@@ -25,7 +25,16 @@ export class CustomWorld extends World {
 
   constructor(options: IWorldOptions) {
     super(options);
-    this.baseURL = process.env.API_BASE_URL || 'https://pokeapi.co';
+    
+    // API_BASE_URL es REQUERIDA - no debe tener valor por defecto
+    if (!process.env.API_BASE_URL) {
+      throw new Error(
+        '❌ API_BASE_URL no está configurada en .env\n' +
+        '   Copia .env.example a .env y configura API_BASE_URL'
+      );
+    }
+    
+    this.baseURL = process.env.API_BASE_URL;
   }
 }
 
