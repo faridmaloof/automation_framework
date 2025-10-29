@@ -12,15 +12,15 @@ Feature: Consultar información de Pokémon
     When consulto el pokemon "<pokemon>" por REST
     Then obtengo respuesta exitosa
     And el nombre del pokemon es "<pokemon>"
-    And el pokemon tiene id 25
+    And el pokemon tiene id <id>
     And el pokemon tiene habilidades
 
     Examples:
-      | pokemon    |
-      | pikachu    |
-      | charizard  |
-      | bulbasaur  |
-      | squirtle   |
+    | pokemon   | id  |
+    | pikachu   | 25  |
+    | charizard | 6   |
+    | bulbasaur | 1   |
+    | squirtle  | 7   |
 
   @smoke @web @chrome
   Scenario: Buscar Pokémon en web
